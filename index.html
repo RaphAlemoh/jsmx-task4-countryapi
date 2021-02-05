@@ -5,10 +5,20 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Country Api using JS</title>
     <style>
+        .unordered-list{
+            display: flex;
+            flex-direction: row;
+            max-width: 100%;
+            flex-wrap: wrap;
+        }
+        li{
+            width: 30%;
+            margin: 5px;
+        }
+
         .card {
           box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
           transition: 0.3s;
-          width: 40%;
         }
         
         .card:hover {
@@ -22,11 +32,21 @@
         ul{
             list-style-type: none;
         }
+
+        .loader{
+            position: absolute;
+            top: 0px;
+            width: 100%;
+            height: 100%;
+            opacity: 0.8;
+        }
+
         </style>
 </head>
 <body>
-
     <div class="container">
+        <h1 style="text-align: center;">Countries and their details</h1>
+        <img id="loader" style="display: none;" class="loader" src="loader.gif" alt="loading" width="20px" height="20px" >
         <ul class="unordered-list" id="country-list">
         </ul>
     </div>
@@ -35,11 +55,13 @@
 
         document.addEventListener('DOMContentLoaded', () => {
             const getCountryList = () => {
+            document.getElementById('loader').style.display = "block";
                 fetch('https://restcountries.eu/rest/v2/all')
                 .then(resp => resp.json())
                 .then(data => renderCountries(data))
-                .catch(function (err) {
-                        alert('No data was fetched.', `${err}`);
+                .catch( err => {
+                    document.getElementById('loader').style.display = "none";
+                    document.querySelector('#country-list').append(`${err}`);   
                 })
             }
 
@@ -53,14 +75,15 @@
                     countryLi.innerHTML =
                     `<div class="card"> 
                         <div class="container">
-                        <h4><b>Country: </b> ${country['name']} </h4>
-                        <span><b>Capital: </b>${country['capital']}</span>
+                        <h4><b>Country </b><br> ${country['name']} </h4>
+                        <span><b>Capital </b><br> ${country['capital']}</span>
                         <p> 
-                            <img src="${country['flag']}" alt="country flag" width="150" height="150" style="width:100%"/>   
+                            <img src="${country['flag']}" alt="country flag" style="width:100%"/>   
                             Region : ${country['region']}                      
                         </p>
                         </div>
                         </div>`;
+                    document.getElementById('loader').style.display = "none";
                     countryUl.append(countryLi);
                 }
             }
