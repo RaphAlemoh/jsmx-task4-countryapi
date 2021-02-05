@@ -4,6 +4,25 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Country Api using JS</title>
+    <style>
+        .card {
+          box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+          transition: 0.3s;
+          width: 40%;
+        }
+        
+        .card:hover {
+          box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
+        }
+        
+        .container {
+          padding: 2px 16px;
+        }
+        
+        ul{
+            list-style-type: none;
+        }
+        </style>
 </head>
 <body>
 
@@ -19,6 +38,9 @@
                 fetch('https://restcountries.eu/rest/v2/all')
                 .then(resp => resp.json())
                 .then(data => renderCountries(data))
+                .catch(function (err) {
+                        alert('No data was fetched.', `${err}`);
+                })
             }
 
             const renderCountries = (data) => {
@@ -28,6 +50,17 @@
                     const br = document.createElement('br');
                     const hr = document.createElement('hr');
                     countryLi.dataset.id = country.id;
+                    countryLi.innerHTML =
+                    `<div class="card"> 
+                        <div class="container">
+                        <h4><b>Country: </b> ${country['name']} </h4>
+                        <span><b>Capital: </b>${country['capital']}</span>
+                        <p> 
+                            <img src="${country['flag']}" alt="country flag" width="150" height="150" style="width:100%"/>   
+                            Region : ${country['region']}                      
+                        </p>
+                        </div>
+                        </div>`;
                     countryUl.append(countryLi);
                 }
             }
